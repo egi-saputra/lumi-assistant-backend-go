@@ -2,12 +2,27 @@ package utils
 
 import (
 	"errors"
+	"log"
+	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 )
 
-var jwtKey = []byte("secret_key") // nanti pindah ke env
+var jwtKey = loadJWTKey()
+
+// loadJWTKey membaca secret dari environment.
+// Di production (APP_ENV=production) JWT_SECRET wajib diisi minimal 32 karakter.
+func loadJWTKey() []byte {
+	if secret := os.Getenv("JWT_SECRET"); len(secret) >= 32 {
+		return []byte(secret)
+	}
+	if os.Getenv("APP_ENV") == "production" {
+		log.Fatal("JWT_SECRET must be set (minimum 32 characters) when APP_ENV=production")
+	}
+	log.Println("WARNING: JWT_SECRET not set; using insecure development key")
+	return []byte("secret_key")
+}
 
 // =========================
 // GENERATE JWT (FINAL)
@@ -40,7 +55,7 @@ func ParseJWT(tokenStr string) (*AuthClaims, error) {
 			return nil, errors.New("unexpected signing method")
 		}
 		return jwtKey, nil
-	})
+	}, jwt.WithValidMethods([]string{"HS256"}))
 
 	if err != nil || !token.Valid {
 		return nil, errors.New("invalid token")
