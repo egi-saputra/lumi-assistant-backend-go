@@ -1,0 +1,9 @@
+.env
+uploads/
+DB.MD
+READ.md
+/backup
+/storefront-vue
+/zpanduan
+compose.yaml
+*.md

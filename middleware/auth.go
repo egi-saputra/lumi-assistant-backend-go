@@ -1,32 +1,40 @@
 package middleware
 
 import (
-    "cbt-api/utils"
-    "net/http"
-    "strings"
+	"assistant/utils"
+	"strings"
 
-    "github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin"
 )
 
 func AuthMiddleware() gin.HandlerFunc {
-    return func(c *gin.Context) {
-        authHeader := c.GetHeader("Authorization")
-        if authHeader == "" {
-            c.JSON(http.StatusUnauthorized, gin.H{"error": "Missing Authorization header"})
-            c.Abort()
-            return
-        }
+	return func(c *gin.Context) {
 
-        tokenStr := strings.TrimPrefix(authHeader, "Bearer ")
-        userID, err := utils.ParseJWT(tokenStr)
-        if err != nil {
-            c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
-            c.Abort()
-            return
-        }
+		auth := c.GetHeader("Authorization")
+		if auth == "" {
+			c.AbortWithStatusJSON(401, gin.H{"error": "Unauthorized"})
+			return
+		}
 
-        // Simpan userID di context supaya bisa dipakai di handler
-        c.Set("userID", userID)
-        c.Next()
-    }
+		token := strings.TrimPrefix(auth, "Bearer ")
+
+		claims, err := utils.ParseJWT(token)
+		if err != nil {
+			c.AbortWithStatusJSON(401, gin.H{"error": "Invalid token"})
+			return
+		}
+
+		// =========================
+		// inject context (NEW STRUCT)
+		// =========================
+		c.Set("user_id", claims.UserID)
+		c.Set("tenant_id", claims.TenantID)
+		role := claims.Role
+		if role == "admin" {
+			role = "owner"
+		}
+		c.Set("role", role)
+
+		c.Next()
+	}
 }

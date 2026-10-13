@@ -1,17 +1,16 @@
 package models
 
 type User struct {
-    ID       int    `json:"id"`
-    Name string `json:"name"`
-    Email string `json:"email"`
-    Phone string `json:"phone"`
-    Password string `json:"-"`
-    Role     string `json:"role"`
-}
+	ID string `json:"id" db:"id"` // ULID
 
-type WhatsappOtp struct {
-    ID        int
-    Phone     string
-    OTP       string
-    ExpiresAt string
+	TenantID string `json:"tenant_id" db:"tenant_id"` // ULID
+
+	Name  string `json:"name" db:"name"`
+	Email string `json:"email,omitempty" db:"email"`
+	Phone string `json:"phone" db:"phone"`
+
+	PasswordHash string `json:"-" db:"password_hash"`
+	Role         string `json:"role" db:"role"`
+
+	CreatedAt string `json:"created_at,omitempty" db:"created_at"`
 }

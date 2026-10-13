@@ -34,7 +34,7 @@ Optional: insert user contoh:
 
 ```sh
 INSERT INTO users (name, email, phone, password, role) VALUES
-('admin', 'admin@example.com', '0896099912121', '$2a$10$CwTycUXWue0Thq9StjUM0uJ8u3m3aWq1/dhblOa/p8jC.5dO/hzFe', 'admin');
+('admin', 'admin@example.com', '0896000000', '$2a$10$CwTycUXWue0Thq9StjUM0uJ8u3m3aWq1/dhblOa/p8jC.5dO/hzFe', 'admin');
 
 INSERT INTO users (name, email, phone, password, role) VALUES
 ('siswa', 'siswa@example.com', '089609916121', '2a$10$FtFhtto7k4yaFDupIxBmKeuy9x2TbPG8K4njjVIQGJ5kM7M3PGthu', 'siswa');
