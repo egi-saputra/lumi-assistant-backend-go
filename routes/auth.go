@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"assistant/handlers"
 	authHandlers "assistant/handlers/auth"
 	"assistant/middleware"
 
@@ -10,7 +9,6 @@ import (
 
 func AuthRoutes(r *gin.Engine) {
 
-	r.GET("/tenants", handlers.GetTenants)
 
 	r.POST("/register_dev", authHandlers.RegisterDeveloper)
 	r.POST("/register_tenant", authHandlers.RegisterTenant)
