@@ -27,16 +27,16 @@ func ConnectMaster() error {
 		return fmt.Errorf("invalid DB_MASTER_NAME %q: only letters, numbers, and underscores are allowed", database)
 	}
 
-		config := mysql.Config{
-			User:                 user,
-			Passwd:               password,
-			Net:                  "tcp",
-			Addr:                 net.JoinHostPort(host, port),
-			ParseTime:            true,
-			Timeout:              5 * time.Second,
-			AllowNativePasswords: true,
-			Params:               map[string]string{"charset": "utf8mb4"},
-		}
+	config := mysql.Config{
+		User:                 user,
+		Passwd:               password,
+		Net:                  "tcp",
+		Addr:                 net.JoinHostPort(host, port),
+		ParseTime:            true,
+		Timeout:              5 * time.Second,
+		AllowNativePasswords: true,
+		Params:               map[string]string{"charset": "utf8mb4"},
+	}
 
 	ctx := context.Background()
 	bootstrap, err := sql.Open("mysql", config.FormatDSN())

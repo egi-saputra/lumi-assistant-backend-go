@@ -33,7 +33,7 @@ func GetTenantDB(dbName string) (*sql.DB, error) {
 	port := envOrDefault("DB_PORT", "3306")
 	user := envOrDefault("DB_USER", "root")
 	password := os.Getenv("DB_PASSWORD")
-		config := mysql.Config{
+	config := mysql.Config{
 		User:                 user,
 		Passwd:               password,
 		Net:                  "tcp",

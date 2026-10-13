@@ -1,16 +1,26 @@
 package auth
 
 import (
-	"database/sql"
 	"assistant/db"
 	"assistant/utils"
+	"crypto/subtle"
+	"database/sql"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 )
 
 func RegisterDeveloper(c *gin.Context) {
+
+	// Endpoint dikunci: hanya aktif kalau DEV_REGISTER_KEY diisi dan header cocok.
+	key := os.Getenv("DEV_REGISTER_KEY")
+	provided := c.GetHeader("X-Dev-Key")
+	if key == "" || subtle.ConstantTimeCompare([]byte(provided), []byte(key)) != 1 {
+		c.AbortWithStatus(http.StatusNotFound)
+		return
+	}
 
 	var req struct {
 		Name     string `json:"name" binding:"required"`
